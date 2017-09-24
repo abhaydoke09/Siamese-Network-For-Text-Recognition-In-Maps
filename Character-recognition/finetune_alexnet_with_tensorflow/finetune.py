@@ -44,8 +44,8 @@ train_layers = ['fc8', 'fc7', 'fc6', 'conv4', 'conv5']
 display_step = 20
 
 # Path for tf.summary.FileWriter and to store model checkpoints
-filewriter_path = "/tmp/finetune_alexnet/tensorboard"
-checkpoint_path = "/tmp/finetune_alexnet/checkpoints"
+filewriter_path = "./tmp/finetune_alexnet/tensorboard"
+checkpoint_path = "./tmp/finetune_alexnet/checkpoints"
 
 """
 Main Part of the finetuning Script.
