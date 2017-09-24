@@ -1,5 +1,5 @@
 import glob
-files = glob.glob('../letters/color/*.png')
+files = glob.glob('../letters/new_color/*.png')
 
 f = open('../image-labels.txt','wb')
 
