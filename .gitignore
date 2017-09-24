@@ -1,3 +1,7 @@
 *.tar*
 *.jp*g
+*.npy
+*.png
+.*
+*.gif
 
