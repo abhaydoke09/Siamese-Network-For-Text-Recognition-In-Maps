@@ -26,19 +26,32 @@ from tensorflow.contrib.data import Iterator
 Configuration Part.
 """
 
+def indexToLabel():
+    labelDictionary = {}
+    cnt = 0
+    for i in xrange(26):
+      labelDictionary[] = chr(65+i)
+      cnt+=1
+    for i in xrange(10):
+      labelDictionary[chr(48+i)] = cnt
+      cnt+=1
+    return labelDictionary
+
+
+
 # Path to the textfiles for the trainings and validation set
 train_file = '../letters/train.txt'
 val_file = '../letters/validation.txt'
 
 # Learning params
 learning_rate = 0.01
-num_epochs = 10
+num_epochs = 30
 batch_size = 128
 
 # Network params
 dropout_rate = 0.5
 num_classes = 36
-train_layers = ['fc8', 'fc7', 'fc6', 'conv4', 'conv5']
+train_layers = ['fc8', 'fc7', 'fc6']
 
 # How often we want to write the tf.summary data to disk
 display_step = 20
@@ -112,7 +125,8 @@ for gradient, var in gradients:
 
 # Add the variables we train to the summary
 for var in var_list:
-    tf.summary.histogram(var.name, var)
+  print var
+  tf.summary.histogram(var.name, var)
 
 # Add the loss to summary
 tf.summary.scalar('cross_entropy', loss)
@@ -139,6 +153,7 @@ saver = tf.train.Saver()
 train_batches_per_epoch = int(np.floor(tr_data.data_size/batch_size))
 val_batches_per_epoch = int(np.floor(val_data.data_size / batch_size))
 
+label = indexToLabel()
 # Start Tensorflow session
 with tf.Session() as sess:
 
