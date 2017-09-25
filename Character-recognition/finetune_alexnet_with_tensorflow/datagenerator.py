@@ -1,7 +1,3 @@
-# Created on Wed May 31 14:48:46 2017
-#
-# @author: Frederik Kratzert
-
 """Containes a helper class for image input pipelines in tensorflow."""
 
 import tensorflow as tf
