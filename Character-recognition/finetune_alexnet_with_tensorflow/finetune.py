@@ -1,15 +1,7 @@
 """Script to finetune AlexNet using Tensorflow.
 
 With this script you can finetune AlexNet as provided in the alexnet.py
-class on any given dataset. Specify the configuration settings at the
-beginning according to your problem.
-This script was written for TensorFlow >= version 1.2rc0 and comes with a blog
-post, which you can find here:
 
-https://kratzert.github.io/2017/02/24/finetuning-alexnet-with-tensorflow.html
-
-Author: Frederik Kratzert
-contact: f.kratzert(at)gmail.com
 """
 
 import os
@@ -25,18 +17,6 @@ from tensorflow.contrib.data import Iterator
 """
 Configuration Part.
 """
-
-def indexToLabel():
-    labelDictionary = {}
-    cnt = 0
-    for i in xrange(26):
-      labelDictionary[] = chr(65+i)
-      cnt+=1
-    for i in xrange(10):
-      labelDictionary[chr(48+i)] = cnt
-      cnt+=1
-    return labelDictionary
-
 
 
 # Path to the textfiles for the trainings and validation set
@@ -153,7 +133,6 @@ saver = tf.train.Saver()
 train_batches_per_epoch = int(np.floor(tr_data.data_size/batch_size))
 val_batches_per_epoch = int(np.floor(val_data.data_size / batch_size))
 
-label = indexToLabel()
 # Start Tensorflow session
 with tf.Session() as sess:
 
