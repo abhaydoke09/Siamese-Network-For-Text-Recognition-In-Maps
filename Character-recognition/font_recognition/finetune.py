@@ -20,8 +20,8 @@ Configuration Part.
 
 
 # Path to the textfiles for the trainings and validation set
-train_file = '../letters/train.txt'
-val_file = '../letters/validation.txt'
+train_file = '../letters/font_train.txt'
+val_file = '../letters/font_validation.txt'
 
 # Learning params
 learning_rate = 0.01
@@ -30,7 +30,7 @@ batch_size = 128
 
 # Network params
 dropout_rate = 0.5
-num_classes = 36
+num_classes = 1866
 train_layers = ['fc8', 'fc7', 'fc6']
 
 # How often we want to write the tf.summary data to disk
