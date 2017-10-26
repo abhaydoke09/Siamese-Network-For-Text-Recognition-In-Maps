@@ -1,0 +1,6 @@
+model_checkpoint_path: "model_epoch81.ckpt"
+all_model_checkpoint_paths: "model_epoch51.ckpt"
+all_model_checkpoint_paths: "model_epoch61.ckpt"
+all_model_checkpoint_paths: "model_epoch71.ckpt"
+all_model_checkpoint_paths: "model_epoch81.ckpt"
+all_model_checkpoint_paths: "model_epoch91.ckpt"

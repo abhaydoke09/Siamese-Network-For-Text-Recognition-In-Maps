@@ -39,11 +39,11 @@ def indexToLabel():
 
 
 # Path to the textfiles for the test set
-test_file = '../letters/test.txt'
+test_file = '../letters/font_test.txt'
 
 batch_size = 1
 # Place data loading and preprocessing on the cpu
-num_classes = 36
+num_classes = 1866
 with tf.device('/cpu:0'):
     test_data = ImageDataGenerator(test_file,
                                  mode='inference',
@@ -76,11 +76,12 @@ softmax = tf.nn.softmax(score)
 saver = tf.train.Saver()
 
 labels = indexToLabel()
-f = open('predictions.txt','wb')
+f = open('predictions_font.txt','wb')
 # Start Tensorflow session
 with tf.Session() as sess:
-	saver = tf.train.import_meta_graph('./checkpoint/model_epoch30.ckpt.meta')
-	saver.restore(sess,'./checkpoint/model_epoch30.ckpt')
+	saver = tf.train.import_meta_graph('./tmp/finetune_alexnet/checkpoints/model_epoch81.ckpt.meta')
+	#saver.restore(sess, './tmp/')
+	saver.restore(sess,'./tmp/finetune_alexnet/checkpoints/model_epoch81.ckpt')
 
 	# Validate the model on the entire validation set
 	print("{} Starting Testing".format(datetime.now()))
@@ -95,7 +96,8 @@ with tf.Session() as sess:
 	    probs = sess.run(softmax, feed_dict={x: img_batch,
 	                                        y: label_batch,
 	                                        keep_prob: 1.})
-	    f.write(str(labels[np.argmax(probs)]) + ',' + str(np.argmax(label_batch)) + '\n')
+	    f.write(str(np.argmax(probs)) + ',' + str(np.argmax(label_batch)) + '\n')
+	    print (str(np.argmax(probs)) + ',' + str(np.argmax(label_batch)) + '\n')
 	    count += 1
 	    if count%1000 == 0:
 	    	print count

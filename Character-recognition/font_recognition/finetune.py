@@ -25,7 +25,7 @@ val_file = '../letters/font_validation.txt'
 
 # Learning params
 learning_rate = 0.01
-num_epochs = 30
+num_epochs = 100
 batch_size = 128
 
 # Network params
@@ -191,12 +191,15 @@ with tf.Session() as sess:
         test_acc /= test_count
         print("{} Validation Accuracy = {:.4f}".format(datetime.now(),
                                                        test_acc))
-        print("{} Saving checkpoint of model...".format(datetime.now()))
 
-        # save checkpoint of the model
-        checkpoint_name = os.path.join(checkpoint_path,
+        if epoch%10==0:
+
+          print("{} Saving checkpoint of model...".format(datetime.now()))
+
+          # save checkpoint of the model
+          checkpoint_name = os.path.join(checkpoint_path,
                                        'model_epoch'+str(epoch+1)+'.ckpt')
-        save_path = saver.save(sess, checkpoint_name)
+          save_path = saver.save(sess, checkpoint_name)
 
-        print("{} Model checkpoint saved at {}".format(datetime.now(),
+          print("{} Model checkpoint saved at {}".format(datetime.now(),
                                                        checkpoint_name))

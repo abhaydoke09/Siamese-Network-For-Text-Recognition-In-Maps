@@ -1,9 +1,15 @@
 *.tar*
-*.jp*g
+*.jpg
+*.jpeg
 *.npy
 *.png
+*
 .*
 *.gif
 *.zip
 *.pyc
 !*.gitignore
+*.ckpt
+*.meta
+maps_project_demo/*
+Character-recognition/font_recognition/tmp/*

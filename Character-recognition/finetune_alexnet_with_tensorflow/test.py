@@ -76,7 +76,7 @@ softmax = tf.nn.softmax(score)
 saver = tf.train.Saver()
 
 labels = indexToLabel()
-f = open('predictions.txt','wb')
+f = open('predictions_temp.txt','wb')
 # Start Tensorflow session
 with tf.Session() as sess:
 	saver = tf.train.import_meta_graph('./checkpoint/model_epoch30.ckpt.meta')
