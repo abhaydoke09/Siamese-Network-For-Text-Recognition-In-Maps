@@ -4,11 +4,12 @@ import numpy as np
 class siamese_network:
 
     # Create model
-    def __init__(self):
+    def __init__(self, batch_size):
         #self.x1 = tf.placeholder(tf.float32, [None, 784])
         #self.x2 = tf.placeholder(tf.float32, [None, 784])
-        self.x1 = tf.placeholder(tf.float32, [10, 227, 227, 3])
-        self.x2 = tf.placeholder(tf.float32, [10, 227, 227, 3])
+        self.x1 = tf.placeholder(tf.float32, [batch_size, 227, 227, 3])
+        self.x2 = tf.placeholder(tf.float32, [batch_size, 227, 227, 3])
+
 
         with tf.variable_scope("siamese") as scope:
             self.o1 = self.network(self.x1)
@@ -16,7 +17,7 @@ class siamese_network:
             self.o2 = self.network(self.x2)
 
         # Create loss
-        self.y_ = tf.placeholder(tf.float32, [10])
+        self.y_ = tf.placeholder(tf.float32, [batch_size])
         self.loss = self.loss_with_step()
 
     def network(self, x):
@@ -27,6 +28,12 @@ class siamese_network:
         # ac2 = tf.nn.relu(fc2)
         # fc3 = self.fc_layer(ac2, 2, "fc3")
         # return fc3
+
+        with tf.name_scope('preprocess') as scope:
+            mean = tf.constant([123.68, 116.779, 103.939], dtype=tf.float32, shape=[1, 1, 1, 3], name='img_mean')
+            x = x - mean
+            print('Adding Data Augmentation')
+
         conv1 = conv(x, 11, 11, 96, 4, 4, padding='VALID', name='conv1')
         norm1 = lrn(conv1, 2, 2e-05, 0.75, name='norm1')
         pool1 = max_pool(norm1, 3, 3, 2, 2, padding='VALID', name='pool1')
@@ -64,8 +71,9 @@ class siamese_network:
         weights_dict = np.load("trained_weights.npy", encoding='bytes').item()
 
         layer_names = ['conv1','conv2','conv2','conv3','conv4', 'conv5']
+        no_training_layers = ['conv1','conv2', 'conv3']
 
-        print(weights_dict.keys())
+        #print(weights_dict.keys())
         # for var in tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES):
         #     print(var)
         # Loop over all layer names stored in the weights dict
@@ -80,12 +88,18 @@ class siamese_network:
                     for data in weights_dict[op_name]:
                         # Biases
                         if len(data.shape) == 1:
-                            var = tf.get_variable('biases', trainable=True)
+                            if op_name in no_training_layers:
+                                var = tf.get_variable('biases', trainable=True)
+                            else:
+                                var = tf.get_variable('biases', trainable=True)
                             session.run(var.assign(data))
 
                         # Weights
                         else:
-                            var = tf.get_variable('weights', trainable=True)
+                            if op_name in no_training_layers:
+                                var = tf.get_variable('weights', trainable=True)
+                            else:
+                                var = tf.get_variable('weights', trainable=True)
                             session.run(var.assign(data))
 
     def loss_with_spring(self):

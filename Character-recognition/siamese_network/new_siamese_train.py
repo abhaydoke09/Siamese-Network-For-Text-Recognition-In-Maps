@@ -6,15 +6,12 @@ from __future__ import print_function
 import tensorflow as tf
 import numpy as np
 import os
-import pickle
-from util import get_test_results
 
 from data_generator_for_siamese import ImageDataGenerator
 from datetime import datetime
 from tensorflow.contrib.data import Iterator
 from tensorflow.contrib.data import Dataset
 from helper import get_dataset
-
 
 import siamese
 
@@ -72,13 +69,28 @@ with tf.device('/cpu:0'):
                                  batch_size=batch_size,
                                  num_classes=num_classes,
                                  shuffle=True)
+#     val_data = ImageDataGenerator(val_file,
+#                                   mode='inference',
+#                                   batch_size=batch_size,
+#                                   num_classes=num_classes,
+#                                   shuffle=False)
+#
+#     # create an reinitializable iterator given the dataset structure
+#     iterator = Iterator.from_structure(tr_data.data.output_types,
+#                                        tr_data.data.output_shapes)
+#     next_batch = iterator.get_next()
+# # Ops for initializing the two different iterators
+# training_init_op = iterator.make_initializer(tr_data.data)
+# #validation_init_op = iterator.make_initializer(val_data.data)
 
 sess.run(tf.global_variables_initializer())
 # start training
 
 siamese_model.load_initial_weights(sess)
 num_epochs = 300
-new = False
+new = True
+
+
 if new:
     for epoch in range(num_epochs):
         #sess.run(training_init_op)
@@ -87,6 +99,7 @@ if new:
             batch_x1, batch_y1, batch_x2, batch_y2 = tr_data.get_run_time_batch()
             #print(batch_x1.shape, batch_x2.shape)
             batch_y = (batch_y1 == batch_y2).astype('float')
+            #print(siamese_model.o1.eval({siamese_model.x1: batch_x1}))
             #print(batch_y)
             _, loss_v = sess.run([train_step, siamese_model.loss], feed_dict={
                 siamese_model.x1: batch_x1,
@@ -97,18 +110,13 @@ if new:
                 print('Model diverged with loss = NaN')
                 quit()
 
-        print('epoch %d: loss %.3f' % (epoch, loss_v))
+        print('epoch %d: loss %.3f %f' % (epoch, loss_v, np.sum(batch_y)))
 
     saver.save(sess, 'model.ckpt')
     #     embed = siamese.o1.eval({siamese.x1: mnist.test.images})
     #     embed.tofile('embed.txt')
 else:
     saver.restore(sess, 'model.ckpt')
-    embed = None
-    flag = False
-    batch_x1, batch_y1, test_words = tr_data.get_test_batch(batch_size)
-    result_vectors = siamese_model.o1.eval({siamese_model.x1: batch_x1})
-    get_test_results(test_words, result_vectors)
 
 # # visualize result
 # x_test = mnist.test.images.reshape([-1, 28, 28])
