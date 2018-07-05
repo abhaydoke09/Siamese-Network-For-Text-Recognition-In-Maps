@@ -1,9 +1,8 @@
 # This is an implementation of Siamese Network in tensorflow.
 
-### Main task to identify same word as that of the given word.
+### Main task to identify same word images as that of the given word image.
 
 ##### Example:
-##### Find same word images for given image:
 
 ##### Original query image
 ![Original query image](./imgs/original.png)
