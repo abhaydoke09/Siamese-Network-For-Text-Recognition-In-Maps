@@ -1,6 +1,7 @@
 # This is an implementation of Siamese Network in tensorflow.
 
 ### Main task to identify same word images as that of the given word image.
+### Network was trained to identify words irrespective of their fonts and case.
 
 ##### Example:
 
