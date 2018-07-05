@@ -3,9 +3,10 @@ This is an implementation of Siamese Network in tensorflow.
 Main task to identify same word as that of the given word.
 
 Example:
-
 Find same word images for given image:
+
 ![Original query image](./imgs/original.png)
+
 
 Top 5 similar words out of 30 test images
 
